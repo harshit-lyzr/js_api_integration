@@ -7,15 +7,16 @@ from dotenv import load_dotenv
 from lyzr_automata.tasks.task_literals import InputType, OutputType
 import os
 
-load_dotenv()
-api = os.getenv("OPENAI_API_KEY")
-
 st.set_page_config(
     page_title="Javascript Api Integration Specialist",
     layout="centered",  # or "wide"
     initial_sidebar_state="auto",
     page_icon="lyzr-logo-cut.png",
 )
+
+
+load_dotenv()
+api = st.sidebar.text_input("Enter Your OPENAI API KEY Here",type="password")
 
 st.markdown(
     """
@@ -36,7 +37,8 @@ st.title("Javascript Api Integration Specialist")
 st.sidebar.markdown("## Welcome to the Javascript Api Integration Specialist!")
 st.sidebar.markdown("This App Harnesses power of Lyzr Automata to generate Script for Javascript API Integration. User Needs to input Specific API Interaction Techniques or Libraries, Specific API Operation and This app generates API Integration Script")
 
-openai_model = OpenAIModel(
+if api:
+    openai_model = OpenAIModel(
         api_key=api,
         parameters={
             "model": "gpt-4-turbo-preview",
@@ -44,6 +46,8 @@ openai_model = OpenAIModel(
             "max_tokens": 1500,
         },
     )
+else:
+    st.sidebar.error("Please Enter Your OPENAI API KEY")
 
 def js_api_integration(technique, operation):
     js_agent = Agent(
